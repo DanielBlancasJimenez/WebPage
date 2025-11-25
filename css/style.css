@@ -1,0 +1,644 @@
+/* ==================================== */
+/* 1. CONFIGURACIÓN GLOBAL Y VARIABLES  */
+/* ==================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+:root {
+    /* --- COLORES PRINCIPALES (BASADOS EN HTML/TAILWIND) --- */
+    --color-primary-dark: #613cb9;
+    --color-accent-yellow: #F2EA79;
+    --color-secondary-dark: #393E41;
+    --color-text-light: #f0f0f0;
+    --color-deep-background: #1a1a1a;
+
+    /* --- COLORES ESPECÍFICOS DE GAMES/CONTACT --- */
+    --color-games-primary-bg: #1a0f2b;
+    --color-games-secondary-bg: #2b1f3d;
+    --color-games-accent: #6a00ff;
+    --color-text-dark: #cccccc;
+    --color-border-games: #4a5c4a;
+    --color-header-gradient-start: #4a0072;
+    --color-header-gradient-end: #1a002b;
+    --color-contact-border: rgba(242, 234, 121, 0.3);
+}
+
+/* ==================================== */
+/* 2. ESTILOS DE SCROLL HORIZONTAL (PC) */
+/* ==================================== */
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-deep-background);
+    color: var(--color-text-light);
+    font-family: 'Roboto', sans-serif;
+}
+
+.horizontal-scroll-wrapper {
+    width: 400vw;
+    height: 100vh;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    will-change: transform;
+}
+
+/* Base de Secciones (Sticky Footer PC) */
+.scroll-section {
+    width: 100vw;
+    height: 100vh;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+}
+/* Empuja el footer hacia abajo */
+.scroll-section main {
+    flex-grow: 1;
+}
+
+/* FIX: Excepción para la Sección START (PC) - Layout de 2 columnas */
+.scroll-section#start {
+    flex-direction: row; /* Anula 'column' y fuerza la fila (aside | main) */
+    justify-content: flex-start;
+    align-items: stretch; /* Estira el contenido al 100% del alto */
+}
+.scroll-section#start .flex { /* Contenedor interno de Start */
+     flex-grow: 1; 
+}
+.scroll-section#start main {
+    padding: 0; /* Asegura que el área de arte no tenga padding vertical innecesario */
+}
+
+
+/* Fondo de la sección Games */
+.scroll-section#games {
+    background-color: var(--color-games-primary-bg);
+    position: relative;
+    z-index: 1;
+}
+.scroll-section#games::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 70% 20%, rgba(106, 0, 255, 0.3) 0%, transparent 30%),
+                radial-gradient(circle at 30% 80%, rgba(26, 0, 43, 0.5) 0%, transparent 50%),
+                linear-gradient(180deg, var(--color-header-gradient-start) 0%, var(--color-header-gradient-end) 100%);
+    z-index: -1;
+}
+
+/* ==================================== */
+/* 3. ESTILOS GENERALES Y COMPARTIDOS   */
+/* ==================================== */
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.title-style, .menu-link, .header-title, .detail-title {
+    font-family: 'epic', serif; 
+}
+
+.title-style {
+    text-shadow: 0 0 10px rgba(242, 234, 121, 0.7); 
+    user-select: none; 
+}
+.imagenLogo {
+    width: 3.2rem;
+    display: inline;
+}
+.img-logo{
+    width: 15rem;
+    border: 0.4rem solid #1a002b;
+    border-radius: 20%;
+}
+
+/* --- MENÚ LATERAL (INDEX) --- */
+.menu-link {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex; 
+    align-items: center; 
+}
+.menu-link:hover {
+    color: var(--color-accent-yellow); 
+    transform: translateX(10px); 
+    text-shadow: 0 0 8px rgba(242, 234, 121, 0.7); 
+}
+.menu-link.selected {
+    color: var(--color-accent-yellow) !important;
+    font-weight: bold;
+}
+.menu-link::before {
+    content: '⬥'; 
+    color: transparent; 
+    margin-right: 0.75rem;
+    display: inline-block;
+    transform: scale(1.2);
+    line-height: 1;
+    transition: color 0.3s ease;
+}
+.menu-link.selected::before {
+    color: var(--color-accent-yellow); 
+}
+
+/* --- ÁREA DE ARTE (INDEX) --- */
+.art-area {
+    background: linear-gradient(225deg, #1a1a1a 0%, var(--color-secondary-dark) 20%, var(--color-primary-dark) 80%, #1a1a1a 100%);
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 5px 0 20px rgba(0, 0, 0, 0.5); 
+}
+
+/* ==================================== */
+/* 4. ESTILOS DE HEADER Y FOOTER (COMPARTIDOS) */
+/* ==================================== */
+
+.header, .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+.header {
+    padding: 20px 40px;
+}
+.header-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--color-accent-yellow); 
+}
+
+/* Headers de Games y Contact */
+.scroll-section#games .header,
+.scroll-section#contact .header {
+    background: rgba(0, 0, 0, 0.3); 
+    border-bottom: 1px solid var(--color-border-games);
+}
+.scroll-section#contact .header {
+    border-bottom: 1px solid var(--color-primary-dark);
+}
+
+/* Controles de Header/Footer */
+.control-key, .control-key-rb {
+    background-color: var(--color-secondary-dark);
+    color: var(--color-text-light);
+    padding: 3px 7px;
+    border-radius: 3px;
+    font-weight: bold;
+    min-width: 20px; 
+    text-align: center;
+}
+.control-key-rb {
+    padding: 5px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Footer (Games y Contact) */
+.footer {
+    padding: 15px 40px;
+    background: rgba(0, 0, 0, 0.3);
+    font-size: 0.9em;
+    flex-shrink: 0; /* Esencial para Sticky Footer */
+}
+.scroll-section#games .footer {
+    border-top: 1px solid var(--color-border-games);
+    color: var(--color-text-dark);
+}
+.scroll-section#contact .footer {
+    border-top: 1px solid var(--color-primary-dark);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-controls {
+    display: flex;
+    gap: 25px;
+}
+.control-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.footer-ubisoft, .footer-studio-info {
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+/* ==================================== */
+/* 5. ESTILOS DE LA SECCIÓN GAMES       */
+/* ==================================== */
+
+.games-layout {
+    display: flex;
+    flex-grow: 1;
+    padding: 40px;
+    gap: 40px; 
+    position: relative;
+    z-index: 5;
+}
+
+/* Game Slots Grid */
+.game-slots {
+    display: grid;
+    grid-template-columns: repeat(3, 2fr); 
+    gap: 2rem;
+    flex: 4; 
+}
+
+.game-slot {
+    background-color: var(--color-games-secondary-bg);
+    border: 1px solid var(--color-border-games);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 250px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+/* 
+.game-slot.selected {
+     border: 3px solid var(--color-games-accent);
+    box-shadow: 0 0 15px rgba(242, 234, 121, 0.7); 
+} */
+
+.slot-number {
+    position: absolute; top: 10px; right: 20px;
+    font-size: 4em; font-weight: 700;
+    color: rgba(255, 255, 255, 0.1); 
+    z-index: 1;
+}
+
+.new-game .add-icon {
+    font-size: 5em; font-weight: 300;
+    color: var(--color-text-dark);
+    margin-bottom: 10px; z-index: 2;
+}
+.new-game .slot-text {
+    font-size: 1.2em; color: var(--color-text-dark); z-index: 2;
+}
+
+/* Saved Game Slot */
+.saved-game {
+    justify-content: flex-start; align-items: flex-start;
+    padding: 30px;
+    background-image: url('https://via.placeholder.com/300x200?text=Lower+City+Image'); 
+    background-size: cover; background-position: center;
+}
+.saved-game::before {
+    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(180deg, rgba(26,15,43,0.8) 0%, rgba(26,15,43,0.9) 70%, rgba(26,15,43,0.95) 100%);
+    z-index: 1;
+}
+.saved-game .game-details { position: relative; z-index: 2; text-align: left; width: 100%; }
+.saved-game .game-title { font-size: 1.8em; font-weight: 700; margin-bottom: 5px;margin-top: 3rem; }
+.saved-game .game-progress, .saved-game .game-time, .saved-game .game-date {
+    font-size: 0.9em; color: var(--color-text-dark); margin: 3px 0;
+}
+
+/* Cloud Save Aside */
+.cloud-save {
+    flex: 1; 
+    background-color: var(--color-games-secondary-bg);
+    border: 1px solid var(--color-border-games);
+    border-radius: 8px; padding: 20px;
+    display: flex; flex-direction: column; gap: 20px;
+}
+.cloud-title {
+    font-size: 1.5em; font-weight: 700; margin-bottom: 15px;
+    color: var(--color-text-light);
+    border-bottom: 1px solid var(--color-border-games); padding-bottom: 10px;
+}
+.cloud-slot {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--color-border-games);
+    border-radius: 5px; padding: 15px;
+    display: flex; flex-direction: column; gap: 5px; font-size: 1.5rem;
+}
+.cloud-game-title { font-size: 1.2em; font-weight: 700; color: var(--color-text-light); }
+.cloud-progress, .cloud-time, .cloud-date { font-size: 0.8em; color: var(--color-text-dark); }
+
+.cloud-actions { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
+.cloud-button {
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--color-border-games);
+    color: var(--color-text-light);
+    padding: 10px 15px; border-radius: 5px; font-size: 0.9em;
+    cursor: pointer; display: flex; align-items: center; gap: 10px;
+    transition: background-color 0.3s ease;
+}
+.cloud-button:hover { background-color: rgba(0, 0, 0, 0.6); }
+
+.cloud-button a {
+    text-decoration: none !important; color: inherit !important; 
+    display: flex; align-items: center; gap: 10px; 
+    width: 100%; justify-content: center; 
+}
+.button-icon { width: 20px; height: 20px; }
+
+/* ==================================== */
+/* 6. ESTILOS DE LA SECCIÓN CONTACTO    */
+/* ==================================== */
+
+.contact-layout {
+    flex-grow: 1;
+    padding: 40px;
+    background-image: linear-gradient(135deg, rgba(97, 60, 185, 0.1) 0%, rgba(26, 26, 26, 0.5) 50%);
+}
+
+/* Menú Superior (Top Menu) */
+.top-menu {
+    display: flex; gap: 30px; font-size: 1.1em;
+    font-weight: 700; letter-spacing: 1px;
+}
+.top-menu-item {
+    color: var(--color-text-light); opacity: 0.6; cursor: pointer; transition: all 0.2s ease;
+}
+.top-menu-item.selected {
+    opacity: 1; color: var(--color-accent-yellow);
+    border-bottom: 2px solid var(--color-accent-yellow); padding-bottom: 5px;
+}
+
+/* Contenedor principal de Contacto */
+.content-container {
+    display: flex; height: 100%; min-height: 60vh;
+    border: 1px solid var(--color-primary-dark);
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 30px rgba(97, 60, 185, 0.3);
+}
+
+/* Lista de ítems */
+.item-list {
+    width: 300px; border-right: 2px solid var(--color-primary-dark);
+    padding: 20px; display: flex; flex-direction: column; gap: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+.category-title {
+    font-size: 1.4em; font-weight: bold; color: var(--color-accent-yellow);
+    margin-bottom: 15px; border-bottom: 1px solid var(--color-contact-border); padding-bottom: 5px;
+}
+.item-slot {
+    display: flex; align-items: center; gap: 15px;
+    padding: 10px 0; cursor: pointer; transition: all 0.2s ease;
+    border-left: 4px solid transparent;
+}
+.item-slot:hover { background-color: rgba(97, 60, 185, 0.1); }
+.item-slot.selected {
+    border-left: 4px solid var(--color-accent-yellow);
+    background-color: rgba(97, 60, 185, 0.2); font-weight: bold;
+}
+.item-image-placeholder {
+    width: 40px; height: 40px; background-color: var(--color-secondary-dark);
+    border: 1px solid var(--color-accent-yellow);
+}
+.item-text { font-size: 1em; }
+
+/* Detalles de ítem */
+.item-details {
+    flex-grow: 1; padding: 40px;
+    background: url('./imagenes/about-bg-placeholder.jpg') no-repeat center center; 
+    background-size: cover; position: relative;
+}
+.item-details::before {
+    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%);
+    z-index: 1;
+}
+.detail-header, .detail-content { position: relative; z-index: 2; }
+.detail-title {
+    font-size: 2.5em; color: var(--color-accent-yellow);
+    margin-bottom: 20px; text-shadow: 0 0 5px rgba(242, 234, 121, 0.5);
+    border-bottom: 2px solid var(--color-primary-dark); padding-bottom: 10px;
+}
+.detail-content p {
+    font-size: 1.1em; line-height: 1.6; margin-bottom: 15px;
+    background-color: rgba(0, 0, 0, 0.5); padding: 10px;
+    border-left: 3px solid var(--color-primary-dark);
+}
+.detail-content strong { color: var(--color-accent-yellow); }
+
+
+
+/* ==================================== */
+/* 7. ESTILOS DE LA SECCIÓN ABOUT       */
+/* ==================================== */
+
+/* Ajuste de fondo para About */
+.scroll-section#about {
+    background-color: #121c22; /* Fondo Azul Oscuro/Gris */
+    color: var(--color-text-light);
+    position: relative;
+}
+.scroll-section#about::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    /* Degradado superpuesto y fondo con patrón */
+    background: url('./imagenes/patron-about.png') repeat, /* Necesitas un patrón de fondo si quieres puntos */
+                linear-gradient(135deg, #1a0f2b 0%, #8857d0 100%);
+    z-index: 1;
+}
+
+/* Header/Footer para About */
+.scroll-section#about .header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+}
+.scroll-section#about .footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+
+/* Layout Principal de About */
+.about-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 40px;
+    flex-grow: 1;
+    position: relative;
+    z-index: 5;
+}
+
+.about-content-container {
+    display: flex;
+    max-width: 1200px;
+    width: 100%;
+    background-color: #1a0f2b; /* Fondo semi-transparente para el contenedor */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px #3e2b5a;
+    min-height: 500px;
+}
+
+/* Columna de la Imagen */
+.about-image-column {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    background-color: #0b1115;
+    position: relative;
+}
+.about-main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Columna del Texto */
+.about-text-column {
+    flex: 2;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+.about-header-text {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: var(--color-accent-yellow);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+.about-text-paragraph {
+    font-size: 1.05em;
+    line-height: 1.6;
+    color: var(--color-text-light);
+    /* Sombreado de texto opcional para darle más presencia */
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+
+/* MEDIA QUERY: ESTILOS MÓVILES (< 768px) para About */
+@media (max-width: 768px) {
+    .about-layout {
+        padding: 20px 10px;
+    }
+    .about-content-container {
+        flex-direction: column;
+    }
+    .about-image-column {
+        flex: none;
+        width: 100%;
+        padding: 15px;
+    }
+    .about-text-column {
+        flex: none;
+        width: 100%;
+        padding: 20px;
+    }
+}
+@media (max-width: 768px) {
+    
+    /* Deshabilitar Scroll Horizontal */
+    .horizontal-scroll-wrapper {
+        width: 100vw; height: auto; position: static; transform: none !important; display: block; 
+    }
+    #scroll-height-container {
+        display: none;
+    }
+    body {
+        overflow-y: scroll; overflow-x: hidden;
+    }
+
+    /* Base de Secciones (Sticky Footer Móvil) */
+    .scroll-section {
+        width: 100%; height: auto; min-height: 100vh; 
+        /* FIX: Debe ser flex para que el footer se pegue al fondo */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Diseño General y Sticky Footer para Contenido */
+    .header, .footer {
+        padding: 15px 20px;
+        flex-shrink: 0; 
+    }
+    .header-title {
+        font-size: 2em;
+    }
+    .top-menu {
+        display: none; 
+    }
+    .scroll-section main, .scroll-section .main-content {
+        flex-grow: 1; /* Empuja el footer */
+        padding: 20px 10px; 
+    }
+    
+    /* Sección START (Vuelve a ser vertical) */
+    .scroll-section#start {
+        flex-direction: column;
+    }
+    .scroll-section#start aside,
+    .scroll-section#start main {
+        width: 100% !important; 
+    }
+    .scroll-section#start aside {
+        padding-bottom: 0;
+    }
+    .scroll-section#start main {
+        padding-top: 0;
+    }
+    
+    /* Sección GAMES (Vertical) */
+    .games-layout {
+        flex-direction: column; 
+        gap: 20px;
+        padding: 20px; 
+    }
+    .game-slots, .cloud-save {
+        grid-template-columns: 1fr; 
+        flex: none; 
+        width: 100%; 
+    }
+
+    /* Sección CONTACTO (Vertical) */
+    .content-container {
+        flex-direction: column; 
+        min-height: auto;
+    }
+    .item-list {
+        width: 100%;
+        border-right: none;
+        border-bottom: 2px solid var(--color-primary-dark);
+        padding: 15px;
+    }
+    .item-details {
+        padding: 15px;
+    }
+    .detail-title {
+        font-size: 2em;
+    }
+}
+
+/* Prueba de css */
+/* ... Código CSS previo ... */
+
+/* ... Tu código CSS previo ... */
+
+
+
+
+
