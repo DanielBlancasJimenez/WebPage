@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
          menuLinks[0].classList.add('selected');
     }
 
-    // --- LÓGICA DE SCROLL LATERAL Y SNAPPING (PC) ---
+  // --- LÓGICA DE SCROLL LATERAL Y SNAPPING (PC) ---
 
     const scrollContainer = document.getElementById('scroll-container');
     const scrollHeightContainer = document.getElementById('scroll-height-container');
@@ -33,9 +33,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Esta lógica solo se ejecuta en pantallas grandes (PC)
     if (scrollContainer && window.innerWidth > 768) {
         
-        const scrollHeight = scrollHeightContainer.offsetHeight;
-        const maxScrollX = 3 * window.innerWidth;
-        const sectionHeight = window.innerHeight;
+        // 1. Declaramos las variables con 'let' para poder actualizarlas
+        let scrollHeight;
+        let maxScrollX;
+        let sectionHeight;
+
+        // 2. Creamos una función que recalcula los tamaños actuales
+        const updateDimensions = () => {
+            scrollHeight = scrollHeightContainer.offsetHeight;
+            maxScrollX = 3 * window.innerWidth; // 3 porque tienes 4 secciones
+            sectionHeight = window.innerHeight;
+        };
+
+        // 3. Calculamos por primera vez al cargar
+        updateDimensions();
 
         const snapToSection = () => {
             const currentScrollY = window.scrollY;
@@ -53,32 +64,27 @@ document.addEventListener('DOMContentLoaded', () => {
             updateMenuHighlight(targetSectionIndex);
         };
 
-        // Hacemos updateScroll global (window.updateScroll) para que pueda ser llamada 
-        // desde el script en index.html (esto soluciona el problema de navegación de los headers).
         window.updateScroll = () => {
             const scrollY = window.scrollY;
 
-            // 1. Calcula y aplica la posición horizontal
+            // Usa las variables que se actualizan dinámicamente
             const scrollProgress = scrollY / (scrollHeight - sectionHeight);
             const scrollX = Math.min(scrollProgress * maxScrollX, maxScrollX);
             scrollContainer.style.transform = `translateX(-${scrollX}px)`;
 
-            // 2. Limpia el temporizador anterior
             clearTimeout(scrollTimeout);
-
-            // 3. Establece un nuevo temporizador para el snap
             scrollTimeout = setTimeout(snapToSection, 150);
             
-            // 4. Mantenemos la actualización del menú en tiempo real
             const currentSectionIndex = Math.round(scrollY / sectionHeight);
             updateMenuHighlight(currentSectionIndex);
         };
 
-        // --- MANEJO DE EVENTOS (Scroll Horizontal) ---
         window.addEventListener('scroll', window.updateScroll);
 
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) {
+                // 4. ¡LA CLAVE ESTÁ AQUÍ! Recalculamos dimensiones antes de reposicionar
+                updateDimensions(); 
                 window.updateScroll(); 
                 snapToSection(); 
             }
