@@ -4,292 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SandWish Studio</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="stylesheet" href="./css/style.css">
-    
-    <script>
-        
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-dark': '#613cb9', // Púrpura Oscuro
-                        'accent-yellow': '#F2EA79', // Amarillo Brillante
-                        'secondary-dark': '#393E41', // Gris Oscuro
-                        'text-light': '#f0f0f0', // Blanco/Gris claro para el texto
-                        'deep-background': '#1a1a1a', // Un color aún más oscuro para el fondo base
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'], 
-                        epic: ['Georgia', 'serif'], 
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Fuente Pixel Retro -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<script>
-
+<body>
+    <!-- Efecto de pantalla retro -->
+    <div class="crt-overlay"></div>
     
-</script>
+    <header class="header">
+        <!-- Selector de idioma CENTRADO de forma segura -->
+        <div class="lang-selector">
+            <button onclick="changeLanguage('es')" id="btn-es" class="retro-btn">ES</button>
+            <button onclick="changeLanguage('en')" id="btn-en" class="retro-btn">EN</button>
+        </div>
 
-<body class="bg-deep-background text-text-light"> <div id="scroll-height-container" class="w-screen" style="height: 400vh;"></div>
+        <img src="imagenes/LOGOCATA(1).png" alt="Catabyte Logo" class="logo-cata">
+        <img src="imagenes/LogoB(1).png" alt="Logo Principal" class="logo-main">
+        <nav class="retro-nav">
+            <a href="#juegos" data-i18n="nav_games">[ JUEGOS ]</a>
+            <a href="#estudio" data-i18n="nav_studio">[ ESTUDIO ]</a>
+            <a href="#redes" data-i18n="nav_social">[ REDES ]</a>
+        </nav>
+    </header>
 
-    <div id="scroll-container" class="horizontal-scroll-wrapper">
-
-        <section id="start" class="scroll-section flex"> <aside class="w-[35%] p-10 flex flex-col justify-start relative z-10" id="menu-area">
-                
-                <header class="mb-24 mt-4">
-                    <h1 class="title-style text-6xl md:text-7xl text-accent-yellow leading-none">
-                        SandWish<span class="text-white text-8xl"><img class="imagenLogo" src="./imagenes/LOGOCATA(1).png" alt="Logo image"></span>Studio
-                    </h1>
-                    <p class="text-sm mt-2 text-text-light/70 ml-2">Development team</p>
-                </header>
-
-                <nav class="space-y-6 text-4xl md:text-5xl">
-                    <a href="#start" class="menu-link text-text-light/80" id="start-link">
-                        Start
-                    </a>
-                    <a href="#games" class="menu-link text-text-light/80" id="games-link">
-                        Games
-                    </a>
-                    <a href="#about" class="menu-link text-text-light/80" id="about-link">
-                        About
-                    </a>
-                    <a href="#contact" class="menu-link text-text-light/80" id="contact-link">
-                        Contact
-                    </a>
-                </nav>
-                
-            </aside>
-            <main class="w-[65%] art-area flex items-end justify-end p-8"> 
-                <div class="text-right">
-                    <p class="text-sm text-text-light/50 mb-2">
-                        Press <span class="text-accent-yellow font-bold">[A]</span> to Selecct
-                    </p>
-                    <div class="bg-secondary-dark/50 text-xs py-1 px-3 rounded-full inline-block border border-accent-yellow/30">
-                        Controler Conected
-                    </div>
+    <main class="container">
+        <!-- SECCIÓN JUEGOS -->
+        <div id="juegos">
+            <h1 class="section-title" data-i18n="title_games">--- SELECCIONA UN JUEGO ---</h1>
+            
+            <!-- JUEGO 1: Those Who Are About To Spin -->
+            <section class="game-box">
+                <div class="game-header">
+                    <img src="imagenes/LogoGame.png" alt="Spin Logo" class="game-logo">
+                    <h2 data-i18n="game1_title">THOSE WHO ARE ABOUT TO SPIN</h2>
                 </div>
-            </main>
-        </section>
-
-        <section id="games" class="scroll-section bg-games-section text-text-light">
-            <header class="header">
-                <a href="#start" class="title-style text-6xl md:text-7xl text-accent-yellow leading-none">
-                     <h1  class="header-title">GAMES</h1>
-                </a>
-               <div class="header-settings"></div>
-            </header>
-
-            <main class="main-content games-layout">
-                <section class="game-slots">
-                    <div class="game-slot new-game"><span class="slot-number">1</span><span class="add-icon">+</span><span class="slot-text">New Game</span></div>
-                    <div class="game-slot new-game"><span class="slot-number">2</span><span class="add-icon">+</span><span class="slot-text">New Game</span></div>
-                    <div class="game-slot saved-game selected">
-                        <span class="slot-number">3</span>
-                        <div class="game-details">
-                            <h3 class="game-title">Those who are about to spin</h3>
-                            <p class="game-progress">Game off 2025</p>
-                            <p class="game-time">1 month of development</p>
-                            <p class="game-date">Release at December 2025</p><br>
-                            <img src="./imagenes/LogoGame.png" alt="GameLogo" class="img-logo">
+                
+                <div class="game-content">
+                    <div class="carousel" id="carousel-spin">
+                        <div class="carousel-track">
+                            <img src="imagenes/those who are aboput to spin 2.png" alt="Spin 1">
+                            <img src="imagenes/those who are aboput to spin 3.png" alt="Spin 2">
+                            <img src="imagenes/those who are aboput to spin 4.png" alt="Spin 3">
+                            <img src="imagenes/those who are aboput to spin 5.png" alt="Spin 4">
                         </div>
+                        <button class="retro-btn prev" onclick="moveCarousel('carousel-spin', -1)">&lt;</button>
+                        <button class="retro-btn next" onclick="moveCarousel('carousel-spin', 1)">&gt;</button>
                     </div>
-                </section>
-               <aside class="cloud-save">
-                    <h2 class="cloud-title">Chose your game !</h2>
-                    <div class="cloud-slot">
-                        <h3 class="cloud-game-title">Those who are about to spin</h3>
-                        <p class="cloud-progress">Game off 2025</p>
-                        <p class="cloud-time">Description: <br> Create your own roulette wheel with mythological creatures so you don't get lynched for being a bad Caesar. Make your own build with the pieces the merchant sells you and get the highest reputation by sending waves of enemies to fight gladiators.</p>
-                    </div>
-                    <div class="cloud-actions">
-                        <button class="cloud-button download">
-                            <a href="https://sandwish-studio.itch.io/those-who-are-about-to-spin" class="menu-link text-text-light/80">
-                            <img src="./imagenes/itchio.png" alt="Download Icon" class="button-icon">PLAY THE GAME!!
-                            </a>
-                        </button>
-                    </div>
-                </aside>
-            </main>
-
-            <footer class="footer">
-                <div class="footer-controls">
-                    <span class="control-item"><span class="control-key">L</span> Navigate</span>
-                    <span class="control-item"><span class="control-key">A</span> Confirm</span>
-                    <span class="control-item"><span class="control-key">Y</span> Copy</span>
-                    <span class="control-item"><span class="control-key">X</span> Delete</span>
-                    <span class="control-item"><span class="control-key">B</span> Back</span>
-                </div>
-                <div class="footer-ubisoft">SANDWISH STUDIO</div>
-            </footer>
-        </section>
-
-      <section id="about" class="scroll-section bg-deep-background text-text-light">
-            <header class="header">
-                <a href="#start" class="title-style text-6xl md:text-7xl text-accent-yellow leading-none">
-                     <h1  class="header-title">ABOUT US</h1>
-                </a>
-               <div class="header-settings"></div>
-            </header>
-
-            <main class="main-content about-layout">
-                <div class="about-content-container">
-                    <div class="about-image-column">
-                        <img src="./imagenes/image.png" alt="Máscara de juego de Stunlock Studios" class="about-main-image">
-                    </div>
-
-                    <div class="about-text-column">
-                        <div class="about-header-text">
-                            SandWish Studio, Development Team.
-                        </div>
-                        
-                        <p class="about-text-paragraph">
-                            SandWish Studio, an emerging independent game studio, is committed to crafting original and engaging digital experiences. Our journey is centered on blending deep, compelling narratives with innovative and satisfying gameplay mechanics. Every project is a step towards leaving a lasting emotional and creative mark on the players.
-                        </p>
-                        
-                        <p class="about-text-paragraph">
-                            In our realm, imagination knows no bounds, and new worlds come to life. We embrace the essence of classic indie games, infusing them with unique ideas, stunning visuals, and imaginative mechanics, all designed to deliver unforgettable player experiences. We are fearlessly dedicated to pure creativity and challenges that push the boundaries of game development.
-                        </p>
-                        
-                        <p class="about-text-paragraph">
-                            At SandWish Studio, we strive for greatness in our craft, bringing together a diverse team of talented developers fueled by a vibrant community of players. Unleash your inner hero and create a lasting legacy, whether as a passionate player or a valued member of our team.
-                        </p>
+                    
+                    <div class="game-desc">
+                        <p data-i18n="spin_desc1">Crea tu propia ruleta con criaturas mitológicas para no ser linchado por ser un mal César.</p>
+                        <p data-i18n="spin_desc2">Haz tu propia "build" con las piezas que vende el mercader y consigue la mayor reputación enviando oleadas de enemigos.</p>
+                        <a href="https://sandwish-studio.itch.io/those-who-are-about-to-spin" target="_blank" class="play-btn" data-i18n="btn_start">JUGAR AHORA</a>
                     </div>
                 </div>
-            </main>
+            </section>
 
-            <footer class="footer">
-                <div class="footer-controls">
-                    <span class="control-item"><span class="control-key">A</span> Next Page</span>
-                    <span class="control-item"><span class="control-key">B</span> Back to Menu</span>
+            <!-- JUEGO 2: Maskness -->
+            <section class="game-box">
+                <div class="game-header">
+                    <img src="imagenes/masknessT.png" alt="Maskness Logo" class="game-logo maskness-logo">
+                    <h2>MASKNESS</h2>
                 </div>
-                <div class="footer-ubisoft">SANDWISH STUDIO</div>
-            </footer>
-        </section>
-
-
-        <section id="contact" class="scroll-section bg-deep-background text-text-light">
-            <header class="header">
-                <a href="#start" class="title-style text-6xl md:text-7xl text-accent-yellow leading-none">
-                     <h1  class="header-title">CONTACT</h1>
-                </a>
-               <div class="header-settings"></div>
-            </header>
-    <main class="main-content contact-layout">
-        <div class="content-container">
-            <aside class="item-list">
-                <div class="item-category"><h2 class="category-title">Our Pillars</h2></div>
                 
-                                <div class="item-slot selected" id="discord-item" data-content="
-                    <div class='detail-header'><h2 class='detail-title'>Discord: Community and Feedback</h2></div>
-                    <div class='detail-content'>
-                    <p><strong>Join the conversation:</strong> Our Discord server is the heart of our community. Here we share the latest developments, ideas, and receive direct feedback from our players.</p>
-                    <p class='mt-4'><strong>Direct Support:</strong> You can talk to the developers, report bugs, and suggest new features for our games. Your voice is essential!</p>
-                    <p class='mt-4'><a href='https://discord.gg/A7PZCt5d' class='text-accent-yellow font-bold hover:underline'>[Click here to join our Discord]</a></p>
-                    </div>
-                    ">
-                    <div class="item-image-placeholder"><img src="./imagenes/discrod.png" alt=""></div><span class="item-text">Discord</span>
-                    </div>
-                    
-                    <div class="item-slot" id="x-item" data-content="
-                    <div class='detail-header'><h2 class='detail-title'>X (Twitter): Brief News</h2></div>
-                    <div class='detail-content'>
-                    <p><strong>Instant updates:</strong> We use X for quick announcements, development screenshots, and fun moments. It's the best way to follow our day-to-day.</p>
-                    <p class='mt-4'><strong>Interaction:</strong> Retweet, comment, and participate in our polls. Follow us so you don't miss a single pixel of action!</p>
-                    <p class='mt-4'><a href='https://x.com/SandWishStudio' class='text-accent-yellow font-bold hover:underline'>[@SandWishStudio]</a></p>
-                    </div>
-                    ">
-                    <div class="item-image-placeholder"><img src="./imagenes/x.avif" alt=""></div><span class="item-text">X</span>
+                <div class="game-content reverse">
+                    <div class="carousel" id="carousel-maskness">
+                        <div class="carousel-track">
+                            <img src="imagenes/Maskness1.png" alt="Maskness Pantalla Inicio">
+                            <img src="imagenes/Maskness2.png" alt="Maskness Gameplay">
+                            <img src="imagenes/Maskness3.png" alt="Maskness Puntuaciones">
+                        </div>
+                        <button class="retro-btn prev" onclick="moveCarousel('carousel-maskness', -1)">&lt;</button>
+                        <button class="retro-btn next" onclick="moveCarousel('carousel-maskness', 1)">&gt;</button>
                     </div>
                     
-                    <div class="item-slot" id="itchio-item" data-content="
-                    <div class='detail-header'><h2 class='detail-title'>Itch.io: Play Now</h2></div>
-                    <div class='detail-content'>
-                    <p><strong>Our Games:</strong> Itch.io is where we publish all our games, both Game Jam demos and full versions. Here you can play <strong>Those who are about to spin</strong> and more.</p>
-                    <p class='mt-4'><strong>Indie Support:</strong> Every download and donation on Itch.io directly supports our independent studio. Thank you for your support!</p>
-                    <p class='mt-4'><a href='https://sandwish-studio.itch.io/' target='_blank' class='text-accent-yellow font-bold hover:underline'>[Visit our profile]</a></p>
+                    <div class="game-desc">
+                        <p data-i18n="mask_desc1">Adéntrate en la locura. Un juego donde las apariencias engañan y cada máscara oculta un nuevo desafío.</p>
+                        <p data-i18n="mask_desc2">¿Podrás descubrir la verdad antes de que se acabe el tiempo?</p>
+                        <a href="https://sandwish-studio.itch.io/maskness" target="_blank" class="play-btn" data-i18n="btn_start">JUGAR AHORA</a>
                     </div>
-                    ">
-                    <div class="item-image-placeholder"><img src="./imagenes/itchio.png" alt=""></div><span class="item-text">Itchio</span>
-                    </div>
-                    
-                    <div class="item-slot" id="instagram-item" data-content="
-                    <div class='detail-header'><h2 class='detail-title'>Instagram: Art and Design</h2></div>
-                    <div class='detail-content'>
-                    <p><strong>Behind the Scenes:</strong> We showcase concept art, 3D models, and the character design process. Ideal for lovers of aesthetics and visual game development.</p>
-                    <p class='mt-4'><strong>Stories and Reels:</strong> Little glimpses into our studio and the life of the SandWish team. Follow us and give us a like!</p>
-                    <p class='mt-4'><a href='https://www.instagram.com/sandwishstudio/' class='text-accent-yellow font-bold hover:underline'>[Follow us on Instagram sandwishstudio]</a></p>
-                    </div>
-                    ">
-                    <div class="item-image-placeholder"><img src="./imagenes/instagram.jpg" alt=""></div><span class="item-text">Instagram</span>
-                    </div>
-                    
-                    </aside>
-                    <section class="item-details">
-                    <div id="detail-content-area">
-                    <div class="detail-header"><h2 class="detail-title">Discord: Community and Feedback</h2></div>
-                    <div class="detail-content">
-                    <p><strong>Join the conversation:</strong> Our Discord server is the heart of our community. Here we share the latest developments, ideas, and receive direct feedback from our players.</p>
-                    <p class='mt-4'><strong>Direct Support:</strong> You can talk to the developers, report bugs, and suggest new features for our games. Your voice is essential!</p>
-                    <p class='mt-4'><a href='https://discord.gg/A7PZCt5d' class='text-accent-yellow font-bold hover:underline'>[Click here to join our Discord]</a></p>
-                    </div>
-                    </div>
+                </div>
             </section>
         </div>
+
+        <!-- SECCIÓN ESTUDIO -->
+        <section id="estudio" class="game-box">
+            <div class="game-header">
+                <h2 data-i18n="studio_title">EQUIPO DE DESARROLLO</h2>
+            </div>
+            
+            <div class="studio-content">
+                <img src="imagenes/image.png" alt="SandWish Studio" class="studio-img">
+                
+                <div class="studio-text">
+                    <p data-i18n="studio_p1">SandWish Studio, un estudio de juegos independiente emergente, se compromete a crear experiencias digitales originales y atractivas. Nuestro viaje se centra en combinar narrativas profundas y cautivadoras con mecánicas de juego innovadoras y satisfactorias. Cada proyecto es un paso hacia dejar una huella emocional y creativa duradera en los jugadores.</p>
+                    <p data-i18n="studio_p2">En nuestro reino, la imaginación no tiene límites y los nuevos mundos cobran vida. Abrazamos la esencia de los juegos independientes clásicos, infundiéndoles ideas únicas, efectos visuales impresionantes y mecánicas imaginativas, todo diseñado para brindar experiencias de jugador inolvidables. Nos dedicamos valientemente a la creatividad pura y a los desafíos que superan los límites del desarrollo de juegos.</p>
+                    <p data-i18n="studio_p3">En SandWish Studio, nos esforzamos por alcanzar la grandeza en nuestro oficio, reuniendo a un equipo diverso de desarrolladores talentosos impulsados por una vibrante comunidad de jugadores. Da rienda suelta al héroe que llevas dentro y crea un legado duradero, ya sea como un jugador apasionado o como un valioso miembro de nuestro equipo.</p>
+                </div>
+            </div>
+        </section>
     </main>
 
-    </section>
+    <footer id="redes" class="footer">
+        <h2 class="section-title" data-i18n="title_social">--- NUESTROS PILARES ---</h2>
+        <div class="social-grid">
+            <a href="https://www.youtube.com/@SandWishStudio" target="_blank" class="social-item">
+                <img src="imagenes/youtube.webp" alt="YouTube"> 
+                <p>YOUTUBE</p>
+            </a>
+            <a href="https://www.instagram.com/sandwishstudio/" target="_blank" class="social-item">
+                <img src="imagenes/instagram.jpg" alt="Instagram"> 
+                <p>INSTAGRAM</p>
+            </a>
+            <a href="https://sandwish-studio.itch.io/" target="_blank" class="social-item">
+                <img src="imagenes/itchio.png" alt="Itch.io"> 
+                <p>ITCH.IO</p>
+            </a>
+        </div>
+        
+        <div class="gamepad-controls">
+            <span data-i18n="ctrl_a">[A] Confirmar</span>
+            <span data-i18n="ctrl_b">[B] Volver</span>
+            <span data-i18n="ctrl_nav">[L/R] Navegar</span>
+        </div>
+        
+        <p class="copyright" data-i18n="footer_copy">INSERT COIN TO CONTINUE... &copy; 2026</p>
+    </footer>
 
-    </div>
-    
     <script src="script.js"></script>
-<script>
-    // Lógica para que el menú del index (Start, Games, About, Contact) 
-    // y los Headers (Games, Contact) desplacen la pantalla al ancla correspondiente.
-    document.addEventListener('DOMContentLoaded', () => {
-        // Seleccionamos los enlaces del menú lateral Y los enlaces de los headers (que también usan href="#start")
-        const allAnchors = document.querySelectorAll('#menu-area a[href^="#"], .header a[href^="#"]');
-
-        allAnchors.forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href').substring(1);
-                const targetSection = document.getElementById(targetId);
-                
-                if (targetSection) {
-                    const sections = Array.from(document.querySelectorAll('.scroll-section'));
-                    const sectionIndex = sections.indexOf(targetSection);
-                    
-                    if (sectionIndex >= 0) {
-                        // Calcula la posición de scroll vertical necesaria. 
-                        const scrollPosition = sectionIndex * window.innerHeight;
-                        
-                        window.scrollTo({
-                            top: scrollPosition,
-                            behavior: 'smooth'
-                        });
-                        
-                        // **Añadimos un ligero retraso para asegurar que la lógica de scroll horizontal
-                        // de script.js se ejecute inmediatamente después del scroll vertical.**
-                        setTimeout(() => {
-                            // Llamamos a la función global si es accesible, o simplemente confiamos en el evento 'scroll'
-                            // Si 'updateScroll' no es global, el 'window.scrollTo' anterior debería bastar,
-                            // pero el timeout ayuda a forzar la actualización en casos de desincronización.
-                            // Si estás en PC, esto forzará el ajuste final del scroll horizontal.
-                            if (typeof updateScroll === 'function') {
-                                updateScroll(); 
-                            }
-                        }, 50); 
-                    }
-                }
-            });
-        });
-    });
-</script>
 </body>
 </html>
