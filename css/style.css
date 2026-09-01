@@ -213,6 +213,7 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
 }
 
 .hud-block { display: flex; align-items: center; gap: 0.6rem; }
+.hud-system, .hud-status { flex-shrink: 0; }
 .hud-label { color: var(--text-dim); }
 
 .hud-brand {
@@ -249,6 +250,19 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
 .hud-breadcrumb {
     color: var(--accent);
     transition: color 0.4s ease;
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: center;
+    padding: 0 0.6rem;
+}
+
+.hud-breadcrumb__text {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .hud-status { color: var(--text-dim); gap: 0.5rem; }
@@ -304,6 +318,9 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
 .hud-back:hover, .hud-back:focus-visible { color: var(--accent); outline: none; }
 
 .hud-hints { display: flex; gap: 1.4rem; color: var(--text-dim); }
+
+/* Pista de gesto para táctil; oculta por defecto, se activa solo en modo táctil (ver media query). */
+.mobile-hint { display: none; }
 
 /* =====================================================================
    SISTEMA DE PANTALLAS
@@ -788,14 +805,15 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
    ===================================================================== */
 
 @media (max-width: 900px) {
-    .game-panel { flex-direction: column; }
+    .game-panel { flex-direction: column; align-items: stretch; }
+    .panel-frame, .game-desc { width: 100%; max-width: 100%; }
     .dossier { flex-direction: column; }
     .dossier__text { border-left: none; border-top: 2px solid var(--line); padding-left: 0; padding-top: 1.4rem; }
     .dossier__portrait { flex: none; width: 100%; max-width: 320px; }
 }
 
 @media (max-width: 640px) {
-    :root { --hud-h: 3.1rem; }
+    :root { --hud-h: 3.4rem; }
 
     .hud { padding: 0 0.8rem; font-size: 0.5rem; }
     .hud-status span:last-child { display: none; }
@@ -814,6 +832,49 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
     .channel-tile { width: 42%; padding: 1.1rem 0.6rem; }
 
     .dossier__portrait { max-width: 100%; }
+}
+
+/* =====================================================================
+   MODO TÁCTIL (móvil / tablet)
+   Los indicadores de mando ([↑↓] [A] [B]) no aplican sin teclado físico,
+   así que se ocultan y se sustituyen por objetivos de toque más grandes
+   y una pista de gesto. Se detecta por capacidad táctil real, no solo
+   por ancho de pantalla, para cubrir también tablets.
+   ===================================================================== */
+
+@media (hover: none) and (pointer: coarse) {
+    /* Los hints de teclado ([↑↓] NAVEGAR / [A] CONFIRMAR) no tienen sentido
+       en táctil: todo se controla tocando directamente los elementos. */
+    .hud-hints { display: none; }
+
+    .hud-bottom { justify-content: center; }
+
+    /* La pista de gesto sustituye a los hints de teclado en táctil. */
+    .mobile-hint {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-dim);
+        font-family: var(--font-body);
+        font-size: 0.95rem;
+    }
+
+    /* Objetivos de toque ampliados (mínimo ~44px recomendado por WCAG). */
+    .menu-item { padding: 0.9rem 0.6rem; min-height: 44px; }
+    .menu-item__cursor { opacity: 1; transform: translateX(0); }
+
+    .hud-brand { min-height: 44px; display: inline-flex; align-items: center; }
+    .hud-back { min-height: 44px; padding: 0.5rem 0.9rem; opacity: 1; visibility: visible; }
+    .retro-btn--mini { min-height: 40px; min-width: 40px; }
+
+    .game-tab { padding: 0.9rem 1.1rem; min-height: 44px; }
+    .carousel-btn { width: 2.9rem; height: 2.9rem; touch-action: manipulation; }
+    .carousel-track { touch-action: pan-y; }
+    .carousel-dots span { width: 10px; height: 10px; }
+
+    .play-btn { padding: 1.05rem 1.5rem; min-height: 44px; }
+    .channel-tile { padding: 1.4rem 1rem; }
+    .channel-tile__go { opacity: 1; transform: translateY(0); }
 }
 
 /* =====================================================================

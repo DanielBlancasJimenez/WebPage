@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="hud-block hud-breadcrumb" id="hud-breadcrumb" aria-live="polite">
-            <span data-i18n="crumb_main">MENÚ PRINCIPAL</span>
+            <span class="hud-breadcrumb__text" id="hud-breadcrumb-text" data-i18n="crumb_main">MENÚ PRINCIPAL</span>
         </div>
         <div class="hud-block hud-status">
             <span class="hud-dot" aria-hidden="true"></span>
@@ -195,6 +195,11 @@
         <div class="hud-hints" id="hud-hints">
             <span data-i18n="ctrl_nav">[↑↓] NAVEGAR</span>
             <span data-i18n="ctrl_a">[A] CONFIRMAR</span>
+        </div>
+        <!-- Visible solo en dispositivos táctiles (ver media query "hover: none and pointer: coarse").
+             Sustituye a los hints de teclado, que no aplican sin mando/teclado físico. -->
+        <div class="mobile-hint" id="mobile-hint" aria-hidden="true">
+            <span data-i18n="mobile_hint">TOCA PARA SELECCIONAR</span>
         </div>
     </footer>
 

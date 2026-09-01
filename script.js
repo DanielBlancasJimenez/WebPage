@@ -40,6 +40,7 @@ const SW = (function () {
             ctrl_a: "[A] CONFIRMAR",
             ctrl_b: "[B] VOLVER",
             ctrl_nav: "[↑↓] NAVEGAR",
+            mobile_hint: "TOCA PARA SELECCIONAR",
             footer_copy: "INSERT COIN TO CONTINUE... &copy; 2026"
         },
         en: {
@@ -69,6 +70,7 @@ const SW = (function () {
             ctrl_a: "[A] CONFIRM",
             ctrl_b: "[B] BACK",
             ctrl_nav: "[\u2191\u2193] NAVIGATE",
+            mobile_hint: "TAP TO SELECT",
             footer_copy: "INSERT COIN TO CONTINUE... &copy; 2026"
         }
     };
@@ -132,18 +134,25 @@ const SW = (function () {
     /* -----------------------------------------------------------------
        HUD / BREADCRUMB
        ----------------------------------------------------------------- */
+    const MOBILE_BREADCRUMB_QUERY = '(max-width: 640px)';
+
     function screenLabel(id) {
         const t = translations[currentLang];
         if (id === 'play') {
-            const gameName = currentGame === 'spin' ? t.game1_title : 'MASKNESS';
+            const isMobile = window.matchMedia(MOBILE_BREADCRUMB_QUERY).matches;
+            // En móvil el título completo ("THOSE WHO ARE ABOUT TO SPIN") no
+            // cabe en la barra superior y desborda; se usa una sigla corta.
+            const gameName = currentGame === 'spin'
+                ? (isMobile ? 'TWAATS' : t.game1_title)
+                : 'MASKNESS';
             return t.crumb_play + '  /  ' + gameName;
         }
         return t['crumb_' + id] || t.crumb_main;
     }
 
     function updateBreadcrumb() {
-        const crumb = document.getElementById('hud-breadcrumb');
-        if (crumb) crumb.textContent = screenLabel(currentScreen);
+        const crumbText = document.getElementById('hud-breadcrumb-text');
+        if (crumbText) crumbText.textContent = screenLabel(currentScreen);
 
         const backBtn = document.getElementById('hud-back-btn');
         if (backBtn) backBtn.classList.toggle('visible', currentScreen !== 'main');
@@ -235,6 +244,40 @@ const SW = (function () {
     function jumpCarousel(id, index) {
         carouselState[id] = index;
         renderCarousel(id);
+    }
+
+    /* -----------------------------------------------------------------
+       GESTOS TÁCTILES (swipe)
+       Alternativa accesible a las flechas de teclado en dispositivos
+       móviles: deslizar horizontalmente sobre un carrusel avanza o
+       retrocede sus imágenes, igual que pulsar los botones < >.
+       ----------------------------------------------------------------- */
+    function addSwipeSupport(el, onSwipe) {
+        if (!el) return;
+        let startX = 0;
+        let startY = 0;
+        let tracking = false;
+        const THRESHOLD = 40; // px mínimos para considerarlo un swipe intencional
+
+        el.addEventListener('touchstart', (e) => {
+            if (e.touches.length !== 1) return;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            tracking = true;
+        }, { passive: true });
+
+        el.addEventListener('touchend', (e) => {
+            if (!tracking) return;
+            tracking = false;
+            const touch = e.changedTouches[0];
+            const dx = touch.clientX - startX;
+            const dy = touch.clientY - startY;
+            // Solo actuar si el gesto es predominantemente horizontal,
+            // para no interferir con el scroll vertical de la pantalla.
+            if (Math.abs(dx) > THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
+                onSwipe(dx < 0 ? 'left' : 'right');
+            }
+        }, { passive: true });
     }
 
     /* -----------------------------------------------------------------
@@ -371,8 +414,30 @@ const SW = (function () {
         carouselState['carousel-spin'] = 0;
         carouselState['carousel-maskness'] = 0;
 
+        // Deslizar con el dedo funciona como alternativa táctil a los
+        // botones < > y a las flechas de teclado.
+        addSwipeSupport(document.getElementById('carousel-spin'), (dir) => {
+            moveCarousel('carousel-spin', dir === 'left' ? 1 : -1);
+        });
+        addSwipeSupport(document.getElementById('carousel-maskness'), (dir) => {
+            moveCarousel('carousel-maskness', dir === 'left' ? 1 : -1);
+        });
+
         initKeyboardNav();
         document.body.classList.add('booted');
+
+        // Si el ancho cruza el umbral móvil (p. ej. al rotar el dispositivo),
+        // recalcula el breadcrumb para usar la sigla corta o el título completo.
+        const breadcrumbMedia = window.matchMedia(MOBILE_BREADCRUMB_QUERY);
+        const handleBreadcrumbBreakpoint = () => {
+            if (currentScreen === 'play') updateBreadcrumb();
+        };
+        if (typeof breadcrumbMedia.addEventListener === 'function') {
+            breadcrumbMedia.addEventListener('change', handleBreadcrumbBreakpoint);
+        } else if (typeof breadcrumbMedia.addListener === 'function') {
+            // Compatibilidad con navegadores antiguos (Safari < 14).
+            breadcrumbMedia.addListener(handleBreadcrumbBreakpoint);
+        }
     }
 
     document.addEventListener('DOMContentLoaded', init);
