@@ -4,131 +4,206 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SandWish Studio</title>
-    <!-- Fuente Pixel Retro -->
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- Tipografías: display pixel + terminal legible -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-    <!-- Efecto de pantalla retro -->
-    <div class="crt-overlay"></div>
-    
-    <header class="header">
-        <!-- Selector de idioma CENTRADO de forma segura -->
-        <div class="lang-selector">
-            <button onclick="changeLanguage('es')" id="btn-es" class="retro-btn">ES</button>
-            <button onclick="changeLanguage('en')" id="btn-en" class="retro-btn">EN</button>
-        </div>
+<body data-screen="boot" class="booting">
 
-        <img src="imagenes/LOGOCATA(1).png" alt="Catabyte Logo" class="logo-cata">
-        <img src="imagenes/LogoB(1).png" alt="Logo Principal" class="logo-main">
-        <nav class="retro-nav">
-            <a href="#juegos" data-i18n="nav_games">[ JUEGOS ]</a>
-            <a href="#estudio" data-i18n="nav_studio">[ ESTUDIO ]</a>
-            <a href="#redes" data-i18n="nav_social">[ REDES ]</a>
-        </nav>
+    <!-- ============ CAPAS DE AMBIENTACIÓN (no interactivas) ============ -->
+    <div class="crt-overlay" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="bg-field" aria-hidden="true">
+        <div class="bg-horizon"></div>
+        <div class="bg-stars"></div>
+        <svg class="bg-glyph bg-glyph--wheel" viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="50" cy="50" r="4" fill="currentColor"/>
+            <line x1="50" y1="4" x2="50" y2="96" stroke="currentColor" stroke-width="1"/>
+            <line x1="4" y1="50" x2="96" y2="50" stroke="currentColor" stroke-width="1"/>
+            <line x1="18" y1="18" x2="82" y2="82" stroke="currentColor" stroke-width="1"/>
+            <line x1="82" y1="18" x2="18" y2="82" stroke="currentColor" stroke-width="1"/>
+        </svg>
+        <svg class="bg-glyph bg-glyph--mask" viewBox="0 0 100 100" aria-hidden="true">
+            <path d="M10 40 Q50 5 90 40 Q90 75 50 90 Q10 75 10 40 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="34" cy="42" r="6" fill="currentColor"/>
+            <circle cx="66" cy="42" r="6" fill="currentColor"/>
+        </svg>
+    </div>
+
+    <!-- ============ PANTALLA DE ARRANQUE ============ -->
+    <div id="boot-screen" class="boot-screen" aria-hidden="true">
+        <p class="boot-line boot-line--brand">SANDWISH STUDIO</p>
+        <p class="boot-line boot-line--dim">SYSTEM v2.6</p>
+        <div class="boot-bar"><span id="boot-bar-fill"></span></div>
+        <p class="boot-line boot-line--dim" id="boot-status" data-i18n="boot_status">CARGANDO ACTIVOS&hellip;</p>
+    </div>
+
+    <!-- ============ HUD SUPERIOR (persistente) ============ -->
+    <header class="hud hud-top">
+        <div class="hud-block hud-system">
+            <span class="hud-brand">
+                <span class="hud-brand__full">SANDWISH STUDIO</span>
+                <span class="hud-brand__short" aria-hidden="true">SW</span>
+            </span>
+            <div class="lang-selector" role="group" aria-label="Idioma / Language">
+                <button onclick="SW.setLanguage('es')" id="btn-es" class="retro-btn retro-btn--mini">ES</button>
+                <button onclick="SW.setLanguage('en')" id="btn-en" class="retro-btn retro-btn--mini">EN</button>
+            </div>
+        </div>
+        <div class="hud-block hud-breadcrumb" id="hud-breadcrumb" aria-live="polite">
+            <span data-i18n="crumb_main">MENÚ PRINCIPAL</span>
+        </div>
+        <div class="hud-block hud-status">
+            <span class="hud-dot" aria-hidden="true"></span>
+            <span data-i18n="hud_online">EN LÍNEA</span>
+        </div>
     </header>
 
-    <main class="container">
-        <!-- SECCIÓN JUEGOS -->
-        <div id="juegos">
-            <h1 class="section-title" data-i18n="title_games">--- SELECCIONA UN JUEGO ---</h1>
-            
-            <!-- JUEGO 1: Those Who Are About To Spin -->
-            <section class="game-box">
-                <div class="game-header">
-                    <img src="imagenes/LogoGame.png" alt="Spin Logo" class="game-logo">
-                    <h2 data-i18n="game1_title">THOSE WHO ARE ABOUT TO SPIN</h2>
-                </div>
-                
-                <div class="game-content">
-                    <div class="carousel" id="carousel-spin">
-                        <div class="carousel-track">
-                            <img src="imagenes/those who are aboput to spin 2.png" alt="Spin 1">
-                            <img src="imagenes/those who are aboput to spin 3.png" alt="Spin 2">
-                            <img src="imagenes/those who are aboput to spin 4.png" alt="Spin 3">
-                            <img src="imagenes/those who are aboput to spin 5.png" alt="Spin 4">
+    <!-- ============ CONTENEDOR DE PANTALLAS ============ -->
+    <main id="screen-stack" class="screen-stack">
+
+        <!-- ---------- PANTALLA: MENÚ PRINCIPAL ---------- -->
+        <section id="screen-main" class="screen screen--main active" data-screen-id="main">
+            <div class="brand-lockup">
+                <h1 class="main-title">SANDWISH<span class="main-title__break"> STUDIO</span></h1>
+                <img src="imagenes/LogoB(1).png" alt="SandWish Studio" class="main-logo">
+            </div>
+            <p class="main-tagline" data-i18n="main_tagline">PULSA UNA OPCIÓN PARA CONTINUAR</p>
+
+            <nav class="main-menu" id="main-menu" aria-label="Menú principal">
+                <button class="menu-item" data-target="play" data-index="0">
+                    <span class="menu-item__cursor" aria-hidden="true">▸</span>
+                    <span class="menu-item__label" data-i18n="nav_games">JUEGOS</span>
+                </button>
+                <button class="menu-item" data-target="studio" data-index="1">
+                    <span class="menu-item__cursor" aria-hidden="true">▸</span>
+                    <span class="menu-item__label" data-i18n="nav_studio">ESTUDIO</span>
+                </button>
+                <button class="menu-item" data-target="network" data-index="2">
+                    <span class="menu-item__cursor" aria-hidden="true">▸</span>
+                    <span class="menu-item__label" data-i18n="nav_social">REDES</span>
+                </button>
+            </nav>
+        </section>
+
+        <!-- ---------- PANTALLA: JUEGOS ---------- -->
+        <section id="screen-play" class="screen screen--play" data-screen-id="play">
+            <h1 class="screen-title" data-i18n="title_games">SELECCIONA UN JUEGO</h1>
+
+            <div class="game-tabs" role="tablist" aria-label="Selector de juego">
+                <button class="game-tab active" data-game="spin" role="tab" aria-selected="true">
+                    <span class="game-tab__index">01</span>
+                    <span class="game-tab__name" data-i18n="game1_title">THOSE WHO ARE ABOUT TO SPIN</span>
+                </button>
+                <button class="game-tab" data-game="maskness" role="tab" aria-selected="false">
+                    <span class="game-tab__index">02</span>
+                    <span class="game-tab__name">MASKNESS</span>
+                </button>
+            </div>
+
+            <div class="game-panels">
+                <!-- JUEGO 1 -->
+                <article class="game-panel active" data-game-panel="spin" role="tabpanel" aria-label="Those Who Are About To Spin">
+                    <div class="panel-frame">
+                        <div class="carousel" id="carousel-spin">
+                            <div class="carousel-track">
+                                <img src="imagenes/those who are aboput to spin 2.png" alt="Spin 1">
+                                <img src="imagenes/those who are aboput to spin 3.png" alt="Spin 2">
+                                <img src="imagenes/those who are aboput to spin 4.png" alt="Spin 3">
+                                <img src="imagenes/those who are aboput to spin 5.png" alt="Spin 4">
+                            </div>
+                            <button class="carousel-btn prev" onclick="SW.moveCarousel('carousel-spin', -1)" aria-label="Anterior">&lt;</button>
+                            <button class="carousel-btn next" onclick="SW.moveCarousel('carousel-spin', 1)" aria-label="Siguiente">&gt;</button>
+                            <div class="carousel-dots" data-dots-for="carousel-spin" aria-hidden="true"></div>
                         </div>
-                        <button class="retro-btn prev" onclick="moveCarousel('carousel-spin', -1)">&lt;</button>
-                        <button class="retro-btn next" onclick="moveCarousel('carousel-spin', 1)">&gt;</button>
                     </div>
-                    
+
                     <div class="game-desc">
+                        <img src="imagenes/LogoGame.png" alt="Spin Logo" class="game-desc__logo">
                         <p data-i18n="spin_desc1">Crea tu propia ruleta con criaturas mitológicas para no ser linchado por ser un mal César.</p>
                         <p data-i18n="spin_desc2">Haz tu propia "build" con las piezas que vende el mercader y consigue la mayor reputación enviando oleadas de enemigos.</p>
                         <a href="https://sandwish-studio.itch.io/those-who-are-about-to-spin" target="_blank" class="play-btn" data-i18n="btn_start">JUGAR AHORA</a>
                     </div>
-                </div>
-            </section>
+                </article>
 
-            <!-- JUEGO 2: Maskness -->
-            <section class="game-box">
-                <div class="game-header">
-                    <img src="imagenes/masknessT.png" alt="Maskness Logo" class="game-logo maskness-logo">
-                    <h2>MASKNESS</h2>
-                </div>
-                
-                <div class="game-content reverse">
-                    <div class="carousel" id="carousel-maskness">
-                        <div class="carousel-track">
-                            <img src="imagenes/Maskness1.png" alt="Maskness Pantalla Inicio">
-                            <img src="imagenes/Maskness2.png" alt="Maskness Gameplay">
-                            <img src="imagenes/Maskness3.png" alt="Maskness Puntuaciones">
+                <!-- JUEGO 2 -->
+                <article class="game-panel" data-game-panel="maskness" role="tabpanel" aria-label="Maskness">
+                    <div class="panel-frame">
+                        <div class="carousel" id="carousel-maskness">
+                            <div class="carousel-track">
+                                <img src="imagenes/Maskness1.png" alt="Maskness Pantalla Inicio">
+                                <img src="imagenes/Maskness2.png" alt="Maskness Gameplay">
+                                <img src="imagenes/Maskness3.png" alt="Maskness Puntuaciones">
+                            </div>
+                            <button class="carousel-btn prev" onclick="SW.moveCarousel('carousel-maskness', -1)" aria-label="Anterior">&lt;</button>
+                            <button class="carousel-btn next" onclick="SW.moveCarousel('carousel-maskness', 1)" aria-label="Siguiente">&gt;</button>
+                            <div class="carousel-dots" data-dots-for="carousel-maskness" aria-hidden="true"></div>
                         </div>
-                        <button class="retro-btn prev" onclick="moveCarousel('carousel-maskness', -1)">&lt;</button>
-                        <button class="retro-btn next" onclick="moveCarousel('carousel-maskness', 1)">&gt;</button>
                     </div>
-                    
+
                     <div class="game-desc">
+                        <img src="imagenes/masknessT.png" alt="Maskness Logo" class="game-desc__logo game-desc__logo--wide">
                         <p data-i18n="mask_desc1">Adéntrate en la locura. Un juego donde las apariencias engañan y cada máscara oculta un nuevo desafío.</p>
                         <p data-i18n="mask_desc2">¿Podrás descubrir la verdad antes de que se acabe el tiempo?</p>
                         <a href="https://sandwish-studio.itch.io/maskness" target="_blank" class="play-btn" data-i18n="btn_start">JUGAR AHORA</a>
                     </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- SECCIÓN ESTUDIO -->
-        <section id="estudio" class="game-box">
-            <div class="game-header">
-                <h2 data-i18n="studio_title">EQUIPO DE DESARROLLO</h2>
+                </article>
             </div>
-            
-            <div class="studio-content">
-                <img src="imagenes/image.png" alt="SandWish Studio" class="studio-img">
-                
-                <div class="studio-text">
+        </section>
+
+        <!-- ---------- PANTALLA: ESTUDIO ---------- -->
+        <section id="screen-studio" class="screen screen--studio" data-screen-id="studio">
+            <h1 class="screen-title" data-i18n="studio_title">EQUIPO DE DESARROLLO</h1>
+
+            <div class="dossier">
+                <div class="dossier__portrait">
+                    <img src="imagenes/image.png" alt="SandWish Studio">
+                    <span class="dossier__tag" data-i18n="dossier_tag">FICHA · SANDWISH</span>
+                </div>
+                <div class="dossier__text">
                     <p data-i18n="studio_p1">SandWish Studio, un estudio de juegos independiente emergente, se compromete a crear experiencias digitales originales y atractivas. Nuestro viaje se centra en combinar narrativas profundas y cautivadoras con mecánicas de juego innovadoras y satisfactorias. Cada proyecto es un paso hacia dejar una huella emocional y creativa duradera en los jugadores.</p>
                     <p data-i18n="studio_p2">En nuestro reino, la imaginación no tiene límites y los nuevos mundos cobran vida. Abrazamos la esencia de los juegos independientes clásicos, infundiéndoles ideas únicas, efectos visuales impresionantes y mecánicas imaginativas, todo diseñado para brindar experiencias de jugador inolvidables. Nos dedicamos valientemente a la creatividad pura y a los desafíos que superan los límites del desarrollo de juegos.</p>
                     <p data-i18n="studio_p3">En SandWish Studio, nos esforzamos por alcanzar la grandeza en nuestro oficio, reuniendo a un equipo diverso de desarrolladores talentosos impulsados por una vibrante comunidad de jugadores. Da rienda suelta al héroe que llevas dentro y crea un legado duradero, ya sea como un jugador apasionado o como un valioso miembro de nuestro equipo.</p>
                 </div>
             </div>
         </section>
+
+        <!-- ---------- PANTALLA: REDES ---------- -->
+        <section id="screen-network" class="screen screen--network" data-screen-id="network">
+            <h1 class="screen-title" data-i18n="title_social">CANALES DE TRANSMISIÓN</h1>
+
+            <div class="channel-grid">
+                <a href="https://www.youtube.com/@SandWishStudio" target="_blank" class="channel-tile">
+                    <img src="imagenes/youtube.webp" alt="YouTube">
+                    <span class="channel-tile__name">YOUTUBE</span>
+                    <span class="channel-tile__go" data-i18n="channel_open">ABRIR &gt;</span>
+                </a>
+                <a href="https://www.instagram.com/sandwishstudio/" target="_blank" class="channel-tile">
+                    <img src="imagenes/instagram.jpg" alt="Instagram">
+                    <span class="channel-tile__name">INSTAGRAM</span>
+                    <span class="channel-tile__go" data-i18n="channel_open">ABRIR &gt;</span>
+                </a>
+                <a href="https://sandwish-studio.itch.io/" target="_blank" class="channel-tile">
+                    <img src="imagenes/itchio.png" alt="Itch.io">
+                    <span class="channel-tile__name">ITCH.IO</span>
+                    <span class="channel-tile__go" data-i18n="channel_open">ABRIR &gt;</span>
+                </a>
+            </div>
+
+            <p class="credits-line" data-i18n="footer_copy">INSERT COIN TO CONTINUE... &copy; 2026</p>
+        </section>
+
     </main>
 
-    <footer id="redes" class="footer">
-        <h2 class="section-title" data-i18n="title_social">--- NUESTROS PILARES ---</h2>
-        <div class="social-grid">
-            <a href="https://www.youtube.com/@SandWishStudio" target="_blank" class="social-item">
-                <img src="imagenes/youtube.webp" alt="YouTube"> 
-                <p>YOUTUBE</p>
-            </a>
-            <a href="https://www.instagram.com/sandwishstudio/" target="_blank" class="social-item">
-                <img src="imagenes/instagram.jpg" alt="Instagram"> 
-                <p>INSTAGRAM</p>
-            </a>
-            <a href="https://sandwish-studio.itch.io/" target="_blank" class="social-item">
-                <img src="imagenes/itchio.png" alt="Itch.io"> 
-                <p>ITCH.IO</p>
-            </a>
+    <!-- ============ HUD INFERIOR (contextual, persistente) ============ -->
+    <footer class="hud hud-bottom" id="hud-bottom">
+        <button class="hud-back" id="hud-back-btn" data-i18n="ctrl_b">[B] VOLVER</button>
+        <div class="hud-hints" id="hud-hints">
+            <span data-i18n="ctrl_nav">[↑↓] NAVEGAR</span>
+            <span data-i18n="ctrl_a">[A] CONFIRMAR</span>
         </div>
-        
-        <div class="gamepad-controls">
-            <span data-i18n="ctrl_a">[A] Confirmar</span>
-            <span data-i18n="ctrl_b">[B] Volver</span>
-            <span data-i18n="ctrl_nav">[L/R] Navegar</span>
-        </div>
-        
-        <p class="copyright" data-i18n="footer_copy">INSERT COIN TO CONTINUE... &copy; 2026</p>
     </footer>
 
     <script src="script.js"></script>
