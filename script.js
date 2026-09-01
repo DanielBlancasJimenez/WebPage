@@ -272,6 +272,19 @@ const SW = (function () {
             // [A] CONFIRMAR — activa de verdad el control con foco, igual que en un mando.
             if (key === 'a') {
                 const focused = document.activeElement;
+
+                // Si el foco está en una pestaña de juego, A debe abrir el juego
+                // seleccionado (el botón "JUGAR AHORA" de ese panel), no volver a
+                // hacer click en la propia pestaña (que no tiene efecto visible).
+                if (focused && focused.classList && focused.classList.contains('game-tab')) {
+                    const activePlayBtn = document.querySelector('.game-panel.active .play-btn');
+                    if (activePlayBtn) {
+                        e.preventDefault();
+                        activePlayBtn.click();
+                    }
+                    return;
+                }
+
                 if (focused && focused !== document.body && typeof focused.click === 'function') {
                     e.preventDefault();
                     focused.click();
