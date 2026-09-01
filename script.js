@@ -151,9 +151,13 @@ const SW = (function () {
         const hints = document.getElementById('hud-hints');
         if (hints) {
             const t = translations[currentLang];
-            hints.innerHTML = currentScreen === 'play'
-                ? `<span>[\u2190\u2192] ${currentLang === 'es' ? 'CAMBIAR JUEGO' : 'SWITCH GAME'}</span><span>${t.ctrl_a}</span>`
-                : `<span>${t.ctrl_nav}</span><span>${t.ctrl_a}</span>`;
+            let navHint = t.ctrl_nav;
+            if (currentScreen === 'play') {
+                navHint = `[\u2190\u2192] ${currentLang === 'es' ? 'CAMBIAR JUEGO' : 'SWITCH GAME'}`;
+            } else if (currentScreen === 'network') {
+                navHint = `[\u2190\u2192] ${currentLang === 'es' ? 'NAVEGAR' : 'NAVIGATE'}`;
+            }
+            hints.innerHTML = `<span>${navHint}</span><span>${t.ctrl_a}</span>`;
         }
     }
 
@@ -257,8 +261,21 @@ const SW = (function () {
        ----------------------------------------------------------------- */
     function initKeyboardNav() {
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && currentScreen !== 'main') {
+            const key = e.key.toLowerCase();
+
+            if ((e.key === 'Escape' || key === 'b') && currentScreen !== 'main') {
+                e.preventDefault();
                 goToScreen('main');
+                return;
+            }
+
+            // [A] CONFIRMAR — activa de verdad el control con foco, igual que en un mando.
+            if (key === 'a') {
+                const focused = document.activeElement;
+                if (focused && focused !== document.body && typeof focused.click === 'function') {
+                    e.preventDefault();
+                    focused.click();
+                }
                 return;
             }
 
@@ -277,14 +294,43 @@ const SW = (function () {
                 }
             }
 
-            if (currentScreen === 'play' && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+            if (currentScreen === 'play') {
                 const tabs = Array.from(document.querySelectorAll('.game-tab'));
-                const idx = tabs.findIndex((t) => t.dataset.game === currentGame);
+                const playBtn = document.querySelector('.game-panel.active .play-btn');
+                const focusedTabIdx = tabs.indexOf(document.activeElement);
+
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    // Si el foco está dentro del panel (ej. el botón de jugar), las flechas
+                    // izq/der vuelven a controlar las pestañas de juego.
+                    const idx = focusedTabIdx !== -1
+                        ? focusedTabIdx
+                        : tabs.findIndex((t) => t.dataset.game === currentGame);
+                    const nextIdx = e.key === 'ArrowRight'
+                        ? (idx + 1) % tabs.length
+                        : (idx - 1 + tabs.length) % tabs.length;
+                    selectGame(tabs[nextIdx].dataset.game);
+                    tabs[nextIdx].focus();
+                } else if (e.key === 'ArrowDown' && focusedTabIdx !== -1 && playBtn) {
+                    // Baja de la pestaña activa directamente al botón "JUGAR AHORA".
+                    e.preventDefault();
+                    playBtn.focus();
+                } else if (e.key === 'ArrowUp' && document.activeElement === playBtn) {
+                    // Sube del botón "JUGAR AHORA" de vuelta a la pestaña activa.
+                    e.preventDefault();
+                    const activeTab = tabs.find((t) => t.dataset.game === currentGame);
+                    if (activeTab) activeTab.focus();
+                }
+            }
+
+            if (currentScreen === 'network' && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+                e.preventDefault();
+                const tiles = Array.from(document.querySelectorAll('.channel-tile'));
+                const idx = tiles.indexOf(document.activeElement);
                 const nextIdx = e.key === 'ArrowRight'
-                    ? (idx + 1) % tabs.length
-                    : (idx - 1 + tabs.length) % tabs.length;
-                selectGame(tabs[nextIdx].dataset.game);
-                tabs[nextIdx].focus();
+                    ? (idx + 1 + tiles.length) % tiles.length
+                    : (idx - 1 + tiles.length) % tiles.length;
+                tiles[nextIdx].focus();
             }
         });
     }
