@@ -45,6 +45,7 @@ body {
     font-family: var(--font-body);
     overflow: hidden;
     height: 100vh;
+    height: 100dvh; /* evita que el pie fijo se desalinee al ocultarse la barra del navegador móvil */
     width: 100vw;
     position: relative;
 }
@@ -330,6 +331,7 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
     position: relative;
     z-index: 10;
     height: 100vh;
+    height: 100dvh; /* consistente con body: evita el salto/solape del pie fijo en móvil */
     width: 100vw;
     padding-top: var(--hud-h);
     padding-bottom: var(--hud-h);
@@ -864,7 +866,7 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
     .menu-item__cursor { opacity: 1; transform: translateX(0); }
 
     .hud-brand { min-height: 44px; display: inline-flex; align-items: center; }
-    .hud-back { min-height: 44px; padding: 0.5rem 0.9rem; opacity: 1; visibility: visible; }
+    .hud-back { min-height: 44px; padding: 0.5rem 0.9rem; }
     .retro-btn--mini { min-height: 40px; min-width: 40px; }
 
     .game-tab { padding: 0.9rem 1.1rem; min-height: 44px; }
