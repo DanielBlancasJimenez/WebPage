@@ -431,6 +431,7 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
     }
 }
 
+
 .main-logo {
     max-width: min(220px, 42vw);
     width: 100%;
