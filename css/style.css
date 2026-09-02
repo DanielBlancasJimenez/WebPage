@@ -248,7 +248,6 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
 
 .hud-brand__short { display: none; }
 
-/* CORRECCIÓN: Centrado absoluto del breadcrumb */
 .hud-breadcrumb {
     color: var(--accent);
     transition: color 0.4s ease;
@@ -324,7 +323,6 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
 
 .hud-hints { display: flex; gap: 1.4rem; color: var(--text-dim); }
 
-/* Pista de gesto para táctil; oculta por defecto, se activa solo en modo táctil (ver media query). */
 .mobile-hint { display: none; }
 
 /* =====================================================================
@@ -335,7 +333,7 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
     position: relative;
     z-index: 10;
     height: 100vh;
-    height: 100dvh; /* consistente con body: evita el salto/solape del pie fijo en móvil */
+    height: 100dvh; 
     width: 100vw;
     padding-top: var(--hud-h);
     padding-bottom: var(--hud-h);
@@ -436,6 +434,8 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
 .main-logo {
     max-width: min(220px, 42vw);
     width: 100%;
+    /* Mueve el logo un poco a la izquierda para centrar visualmente el cuerpo de la taza/tetera */
+    margin-left: -1.9rem; 
     image-rendering: pixelated;
     filter: drop-shadow(0 0 18px rgba(255, 204, 0, 0.16));
     animation: logo-breathe 5s ease-in-out infinite;
@@ -462,9 +462,8 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
 }
 
 .menu-item {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
+    display: block;
+    text-align: center;
     background: none;
     border: none;
     cursor: pointer;
@@ -476,34 +475,39 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
 }
 
 .menu-item__cursor {
+    position: absolute;
+    right: 100%;
+    top: 50%;
     color: var(--accent);
     opacity: 0;
-    transform: translateX(-6px);
+    transform: translateY(-50%) translateX(-6px);
     transition: opacity 0.18s ease, transform 0.18s ease;
+    padding-right: 0.4rem; 
 }
 
 .menu-item__label {
+    display: block;
     transition: color 0.18s ease, transform 0.18s ease, letter-spacing 0.18s ease;
-    transform-origin: left center;
+    transform-origin: center center;
 }
 
 .menu-item:hover .menu-item__cursor,
 .menu-item:focus-visible .menu-item__cursor,
 .menu-item.selected .menu-item__cursor {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(-50%) translateX(0);
 }
 
 .menu-item:hover .menu-item__label,
 .menu-item:focus-visible .menu-item__label,
 .menu-item.selected .menu-item__label {
     color: var(--accent);
-    transform: translateX(4px) scale(1.04);
+    transform: scale(1.04);
     letter-spacing: 0.02em;
 }
 
 .menu-item:focus-visible { outline: none; }
-.menu-item:active .menu-item__label { transform: translateX(4px) scale(0.97); }
+.menu-item:active .menu-item__label { transform: scale(0.97); }
 
 /* =====================================================================
    PANTALLA: JUEGOS
@@ -842,20 +846,13 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
 
 /* =====================================================================
    MODO TÁCTIL (móvil / tablet)
-   Los indicadores de mando ([↑↓] [A] [B]) no aplican sin teclado físico,
-   así que se ocultan y se sustituyen por objetivos de toque más grandes
-   y una pista de gesto. Se detecta por capacidad táctil real, no solo
-   por ancho de pantalla, para cubrir también tablets.
    ===================================================================== */
 
 @media (hover: none) and (pointer: coarse) {
-    /* Los hints de teclado ([↑↓] NAVEGAR / [A] CONFIRMAR) no tienen sentido
-       en táctil: todo se controla tocando directamente los elementos. */
     .hud-hints { display: none; }
 
     .hud-bottom { justify-content: center; }
 
-    /* La pista de gesto sustituye a los hints de teclado en táctil. */
     .mobile-hint {
         display: flex;
         align-items: center;
@@ -865,9 +862,8 @@ body.booted #screen-stack { animation: power-on 0.5s ease both; }
         font-size: 0.95rem;
     }
 
-    /* Objetivos de toque ampliados (mínimo ~44px recomendado por WCAG). */
     .menu-item { padding: 0.9rem 0.6rem; min-height: 44px; }
-    .menu-item__cursor { opacity: 1; transform: translateX(0); }
+    .menu-item__cursor { opacity: 1; transform: translateY(-50%) translateX(0); }
 
     .hud-brand { min-height: 44px; display: inline-flex; align-items: center; }
     .hud-back { min-height: 44px; padding: 0.5rem 0.9rem; }
